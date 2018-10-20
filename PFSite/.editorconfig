@@ -1,0 +1,15 @@
+# 若要了解有关 .editorconfig 的详细信息，请参阅 https://aka.ms/editorconfigdocs
+root = true
+
+# All files
+[*]
+indent_style = space
+charset = utf-8
+
+# Web files
+[*.{cshtml,js,css}]
+indent_size = 2
+
+# Code files
+[*.{cs,csx,vb,vbx}]
+indent_size = 4

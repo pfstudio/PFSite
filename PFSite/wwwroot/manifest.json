@@ -1,0 +1,22 @@
+{
+  "name": "攀峰工作室",
+  "short_name": "攀峰工作室",
+  "theme_color": "#409eff",
+  "background_color": "#3a8ee6",
+  "display": "fullscreen",
+  "Scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "images/icons/logo-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icons/logo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "splash_pages": null
+}

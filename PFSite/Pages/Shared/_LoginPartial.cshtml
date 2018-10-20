@@ -1,0 +1,56 @@
+@using PFSite.OAuth.GitHub
+@using System.Security.Claims
+@inject PFSite.Repositories.UserRepository UserRepo
+
+@if (User.Identity.IsAuthenticated)
+{
+  string githubId = User.GetGitHubId();
+  var user = await UserRepo.FindWithAsync(githubId);
+  if (user == null)
+  {
+    <a role="button" class="btn btn-outline-light btn-sm m-2" asp-page="Bind">绑定姓名</a>
+  }
+  else
+  {
+    <form class="form-inline my-2" asp-controller="Account" asp-action="Logout" method="post">
+      <a id="user-info" href="javascript:void(0);" data-toggle="popover" data-placement="bottom">
+        <img src="@User.FindFirstValue("github:avatar")" class="navbar-avatar rounded-circle" onerror="this.src='/images/default-avatar.png'" />
+        <span class="text-white mr-3">@user.Name</span>
+      </a>
+      <button type="submit" class="btn btn-outline-danger btn-sm">注销</button>
+    </form>
+
+    <div id="popover-content-user-info" style="display: none;">
+      <div id="user-info-popover" style="width: 14rem;">
+        <div class="d-inline-flex justify-content-center w-100">
+          <img src="@User.FindFirst("github:avatar").Value" class="rounded" style="height: 5rem;border-bottom:groove;" onerror="this.src='/images/default-avatar.png'" />
+          <div class="ml-3 float-right">
+            <h3>@user.Name</h3>
+            <i class="fa fa-github m-2"></i>
+            <a href="@User.FindFirstValue("github:url")" class="text-muted">@User.FindFirstValue("github:login")</a>
+          </div>
+        </div>
+        <div class="d-flex justify-content-around">
+          <div class="my-auto">
+            <span>积分: </span>
+            <strong class="ml-1">@user.Points</strong>
+          </div>
+          <form class="mb-1" method="post">
+            @if (await UserRepo.IsSignedAsync(user.StudentId))
+            {
+              <button class="btn btn-warning" asp-page="Record" asp-page-handler="SignOut"><i class="fa fa-sign-out mr-2"></i>签退</button>
+            }
+            else
+            {
+              <button class="btn btn-primary" asp-page="Record" asp-page-handler="SignIn"><i class="fa fa-sign-in mr-2"></i>签到</button>
+            }
+          </form>
+        </div>
+      </div>
+    </div>
+  }
+}
+else
+{
+  <a role="button" class="btn btn-primary btn-sm m-2" asp-controller="Account" asp-action="Login">登录</a>
+}

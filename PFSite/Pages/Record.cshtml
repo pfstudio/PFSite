@@ -1,0 +1,127 @@
+@page "{handler?}"
+@inject PFSite.Repositories.RecordRepository recordRepo
+@model PFSite.Pages.RecordModel
+@{
+  ViewData["Title"] = "Record";
+}
+
+<main role="main" class="bg-light">
+  <div class="d-flex flex-column container pt-2">
+    @if (!ModelState.IsValid)
+    {
+      foreach (var error in ModelState.GetValueOrDefault("").Errors)
+      {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <span>@error.ErrorMessage</span>
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+      }
+    }
+    @if (User.Identity.IsAuthenticated)
+    {
+      <section>
+        <div class="title mt-3">
+          <h2>我的签到记录</h2>
+          <hr />
+        </div>
+        <canvas id="my-chart"></canvas>
+      </section>
+    }
+    <section style="min-height: 50rem;">
+      <div class="title mt-5">
+        <h2>本周签到记录</h2>
+        <hr />
+      </div>
+      <table class="table table-striped text-center">
+        <thead>
+          <tr>
+            <th>姓名</th>
+            <th>时长</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var item in await recordRepo.ReportAllAsync())
+          {
+            @if (item.Duration < TimeSpan.FromMinutes(1))
+            {
+              continue;
+            }
+            <tr>
+              <td>@item.Name</td>
+              @{
+                string time = "";
+                if (item.Duration.Days > 0)
+                {
+                  time += $"{item.Duration.Days}天 ";
+                }
+                time += $"{item.Duration.Hours:D2}小时{item.Duration.Minutes:D2}分";
+              }
+              <td>@time</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  </div>
+</main>
+
+@section Scripts
+  {
+  <script>
+    $('#nav-record').addClass('active');
+  </script>
+  @if (User.Identity.IsAuthenticated)
+  {
+    <environment include="Development">
+      <script src="~/lib/moment.js/moment-with-locales.js"></script>
+      <script src="~/lib/Chart.js/Chart.js"></script>
+      <script src="~/js/chart-utils.js"></script>
+    </environment>
+    <environment exclude="Development">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js" integrity="sha256-VrmtNHAdGzjNsUNtWYG55xxE9xDTz4gF63x/prKXKH0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js" integrity="sha256-CfcERD4Ov4+lKbWbYqXD6aFM9M51gN4GUEtDhkWABMo=" crossorigin="anonymous"></script>
+      <script src="~/js/chart-utils.min.js"></script>
+    </environment>
+    <script>
+      var chart;
+      let color = utils.colors.blue;
+      $.getJSON('/Record/Me', res => {
+        chart = new Chart('my-chart', {
+          type: 'line',
+          data: {
+            labels: res.map(dd => moment(dd.date).format('MM-DD')),
+            datasets: [{
+              label: '签到时长',
+              backgroundColor: utils.transparentize(color),
+              borderColor: color,
+              data: res.map(dd => moment.duration(dd.duration).asHours()),
+              fill: 'start',
+            }],
+          },
+          options: myChartOptions
+        });
+      });
+    </script>
+  }
+  @if (!string.IsNullOrEmpty(Model.Notification))
+  {
+    <script>
+      console.log('申请权限');
+      if (window.Notification && Notification.permission !== 'denied') {
+        Notification.requestPermission(function (status) {
+          if (Notification.permission !== status) {
+            Notification.permission = status;
+          }
+        });
+      }
+      if (window.Notification && Notification.permission === 'granted') {
+        let n = new Notification("PFSign", {
+          body: '@Html.Raw(Model.Notification)',
+          icon: '/images/icons/logo-128x128.png'
+        });
+      } else {
+        alert('@Html.Raw(Model.Notification)');
+      }
+    </script>
+  }
+}

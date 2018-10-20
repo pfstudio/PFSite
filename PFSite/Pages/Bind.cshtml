@@ -1,0 +1,72 @@
+﻿@page
+@model PFSite.Pages.BindModel
+@{
+  ViewData["Title"] = "Bind";
+}
+
+<div class="col d-flex flex-column bg-light" style="padding-top: 10rem;padding-bottom: 18rem;">
+  <div class="card text-center mx-sm-auto">
+    <div class="card-header card-header-primary text-center">
+      <h4 class="card-title">绑定信息</h4>
+      <p>
+        <i class="fa fa-github"></i>
+        @Model.User.FindFirst("github:login").Value
+      </p>
+    </div>
+    <form class="form" method="post">
+      <div class="card-body">
+        <div class="input-group p-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <i class="fa fa-graduation-cap"></i>
+            </div>
+          </div>
+          <input asp-for="StudentId" class="form-control" placeholder="你的学号" />
+        </div>
+        <div class="input-group p-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              &nbsp;<i class="fa fa-user"></i>&nbsp;
+            </div>
+          </div>
+          <input asp-for="Name" class="form-control" placeholder="你的姓名" />
+        </div>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary">绑定信息</button>
+      </div>
+    </form>
+  </div>
+</div>
+@if (!ModelState.IsValid)
+{
+
+  <div id="errorModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Error!</h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body w-75 mx-auto">
+          @foreach (var error in ModelState.GetValueOrDefault("").Errors)
+          {
+            <p>@error.ErrorMessage</p>
+          }
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @section Scripts
+  {
+    <script>
+      $('#errorModal').modal();
+    </script>
+  }
+}

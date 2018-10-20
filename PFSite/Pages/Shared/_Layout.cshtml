@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>@ViewData["Title"]</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <link rel="manifest" href="~/manifest.json" />
+  <!-- CSS File -->
+  <environment include="Development">
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+  </environment>
+  <environment exclude="Development">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="~/css/site.min.css" />  
+  </environment>
+</head>
+<body>
+  <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand" asp-page="Index">攀峰工作室</a>
+    <button class="navbar-toggler m-1" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li id="nav-home" class="nav-item">
+          <a class="nav-link" asp-page="Index">Home</a>
+        </li>
+        <li id="nav-record" class="nav-item">
+          <a class="nav-link" asp-page="Record">Record</a>
+        </li>
+      </ul>
+      <partial name="_LoginPartial" />
+    </div>
+  </nav>
+
+  @RenderBody()
+
+  <footer class="footer bg-dark text-white-50 py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+          <ul class="list-inline mb-2">
+            <li class="list-inline-item">
+              <a href="http://sci.hdu.edu.cn/" class="text-white-50">杭电理学院</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+              <a href="https://pages.songjf.top/" class="text-white-50">理学院科协</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+              <a href="https://docs.songjf.top/" class="text-white-50">文档中心</a>
+            </li>
+          </ul>
+          <p class="text-muted small mb-4 mb-lg-0">&copy; PFStudio @DateTime.Today.Year. All Rights Reserved.</p>
+        </div>
+        <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+          <i class="fa fa-github fa-2x fa-fw"></i>
+          <a href="https://github.com/pfstudio" class="text-white-50 ml-2 align-text-bottom" style="font-size: large;">攀峰工作室</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core Js File -->
+  <environment include="Development">
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+  </environment>
+  <environment exclude="Development">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js" integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=" crossorigin="anonymous"></script>
+    <script src="~/js/site.min.js"></script>  
+  </environment>
+
+  @RenderSection("Scripts", required: false)
+</body>
+</html>

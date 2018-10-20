@@ -1,0 +1,163 @@
+@page
+@using Microsoft.Extensions.Configuration
+@model PFSite.Pages.IndexModel
+@inject IConfiguration Configuration
+@{
+    ViewData["Title"] = "攀峰签到";
+    List<Models.Slide> slides = new List<Models.Slide>();
+    Configuration.GetSection("Slides").Bind(slides);
+}
+
+<!-- 走马灯 -->
+@if (slides.Count > 0)
+{
+  var firstSlide = slides.First();
+  <header>
+    <div id="carouseHomePage" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#carouseHomePage" data-slide-to="0" class="active"></li>
+        @for (int i = 1; i < slides.Count; i++)
+        {
+          <li data-target="#carouseHomePage" data-slide-to="@i"></li>
+        }
+      </ol>
+      <div class="carousel-inner" role="listbox">
+        <div class="carousel-item active" style="background-image: url('@firstSlide.ImageUrl')">
+          <div class="carousel-caption">
+            @if (string.IsNullOrEmpty(firstSlide.ActionUrl))
+            {
+              <h3>@firstSlide.Title</h3>
+            }
+            else
+            {
+              <h3><a href="@firstSlide.ActionUrl" class="text-white">@firstSlide.Title</a></h3>
+            }
+            <p class="text-muted">@firstSlide.Description</p>
+          </div>
+        </div>
+        @foreach (var slide in slides.Skip(1))
+        {
+          <div class="carousel-item" style="background-image: url('@slide.ImageUrl')">
+            <div class="carousel-caption">
+              @if (string.IsNullOrEmpty(slide.ActionUrl))
+              {
+                <h3>@slide.Title</h3>
+              }
+              else
+              {
+                <h3><a href="@slide.ActionUrl" class="text-white">@slide.Title</a></h3>
+              }
+              <p class="text-muted">@slide.Description</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </header>
+}
+
+<!-- Projects Section -->
+<section id="projects" class="projects-section bg-light">
+  <div class="container title">
+    <h2>项目介绍</h2>
+    <hr />
+  </div>
+  <div class="container">
+
+    <!-- Featured Project Row -->
+    <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+      <div class="col-xl-8 col-lg-7">
+        <img class="img-fluid mb-3 mb-lg-0" src="https://blackrockdigital.github.io/startbootstrap-grayscale/img/bg-masthead.jpg" alt="">
+      </div>
+      <div class="col-xl-4 col-lg-5">
+        <div class="featured-text text-center text-lg-left">
+          <h4>Shoreline</h4>
+          <p class="text-black-50 mb-0">Grayscale is open source and MIT licensed. This means you can use it for any project - even commercial projects! Download it, customize it, and publish your website!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project One Row -->
+    <div class="row justify-content-center no-gutters mb-5 mb-lg-0 bg-dark">
+      <div class="col-lg-6">
+        <img class="img-fluid" src="https://blackrockdigital.github.io/startbootstrap-grayscale/img/demo-image-01.jpg" alt="">
+      </div>
+      <div class="col-lg-6">
+        <div class="bg-black text-center h-100 project">
+          <div class="d-flex h-100">
+            <div class="project-text w-100 my-auto text-center text-lg-left">
+              <h4 class="text-white">Misty</h4>
+              <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+              <hr class="d-none d-lg-block mb-0 ml-0">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Two Row -->
+    <div class="row justify-content-center no-gutters bg-dark">
+      <div class="col-lg-6">
+        <img class="img-fluid" src="https://blackrockdigital.github.io/startbootstrap-grayscale/img/demo-image-02.jpg" alt="">
+      </div>
+      <div class="col-lg-6 order-lg-first">
+        <div class="bg-black text-center h-100 project">
+          <div class="d-flex h-100">
+            <div class="project-text w-100 my-auto text-center text-lg-right">
+              <h4 class="text-white">Mountains</h4>
+              <p class="mb-0 text-white-50">Another example of a project with its respective description. These sections work well responsively as well, try this theme on a small screen!</p>
+              <hr class="d-none d-lg-block mb-0 mr-0">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 关于我们 -->
+<section class="features-icons bg-light text-center">
+  <div class="container title">
+    <h2>关于我们</h2>
+    <hr />
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+          <div class="features-icons-icon d-flex">
+            <i class="fa fa-code m-auto text-black-50"></i>
+          </div>
+          <h3>热爱代码</h3>
+          <p class="lead mb-0">CSS 鬼才</p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+          <div class="features-icons-icon d-flex">
+            <i class="fa fa-comments m-auto text-black-50"></i>
+          </div>
+          <h3>交流分享</h3>
+          <p class="lead mb-0">每周报告会</p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+          <div class="features-icons-icon d-flex">
+            <i class="fa fa-handshake-o m-auto text-black-50"></i>
+          </div>
+          <h3>团队协作</h3>
+          <p class="lead mb-0">日常挖坑</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+@section Scripts
+  {
+  <script>
+    $('#nav-home').addClass('active');
+  </script>
+}
